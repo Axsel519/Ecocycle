@@ -1,0 +1,28 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background: linear-gradient(
+    180deg,
+    #7be8b2 0%,
+    #bcf2d6 40%,
+    #eefbf4 100%
+  ) !important;
+  background-attachment: fixed !important;
+}
+
+.layout-wrapper,
+.home-container,
+.main-content,
+.hero-section {
+  background-color: transparent !important;
+}
+
+img,
+.hero-img,
+.logo-image {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}

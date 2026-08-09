@@ -1,0 +1,303 @@
+* {
+  box-sizing: border-box;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+}
+
+.pickup-page-container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  color: #2d3748;
+  overflow-x: hidden;
+  border-radius: 1vw;
+}
+
+.pickup-content-wrapper {
+  max-width: 1100px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 32px 20px 60px 20px;
+  box-sizing: border-box;
+}
+
+.pickup-header {
+  text-align: center;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  margin-bottom: 2rem;
+}
+
+.pickup-header .green-text {
+  color: #1e6d52;
+}
+
+.pickup-content {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+/* Map Section */
+.map-section {
+  width: 100%;
+  height: 580px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e2e8f0;
+  position: relative;
+  z-index: 1;
+}
+
+.interactive-map {
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* Form Section */
+.form-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-label {
+  display: block;
+  font-weight: 800;
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+  color: #1a202c;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid #cbd5e0;
+  border-radius: 8px;
+  background-color: #f8fafc;
+  font-size: 0.9rem;
+  color: #4a5568;
+  outline: none;
+}
+
+.form-input:focus {
+  border-color: #1e6d52;
+}
+
+/* Pickup Types */
+.pickup-type-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.type-card {
+  border: 1px solid #cbd5e0;
+  border-radius: 10px;
+  padding: 0.75rem 0.5rem;
+  text-align: center;
+  cursor: pointer;
+  background-color: #fff;
+  transition: all 0.2s ease;
+}
+
+.type-card.active {
+  border-color: #1e6d52;
+  background-color: #e6f4ea;
+}
+
+.type-icon {
+  font-size: 1.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.type-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #2d3748;
+  display: block;
+}
+
+/* Date & Time Inputs */
+.date-time-inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.input-with-icon {
+  display: flex;
+  align-items: center;
+  border: 1px solid #cbd5e0;
+  border-radius: 8px;
+  padding: 0.4rem 0.6rem;
+  background-color: #fff;
+}
+
+.input-with-icon .icon {
+  margin-right: 0.4rem;
+  font-size: 0.9rem;
+}
+
+.input-with-icon input {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 0.85rem;
+  background: transparent;
+  color: #4a5568;
+  font-family: inherit;
+}
+
+/* Waste Items List with Counters */
+.waste-list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  max-height: 240px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.waste-item-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background-color: #f8fafc;
+}
+
+.waste-item-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.waste-icon {
+  font-size: 1.2rem;
+  color: #1e6d52;
+  display: flex;
+  align-items: center;
+}
+
+.waste-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #2d3748;
+}
+
+.unit-price {
+  font-size: 0.75rem;
+  color: #718096;
+}
+
+/* Counter Controls */
+.quantity-counter {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.counter-btn {
+  background: transparent;
+  border: none;
+  color: #1e6d52;
+  font-size: 1.25rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  transition: transform 0.1s ease;
+}
+
+.counter-btn:hover {
+  transform: scale(1.1);
+}
+
+.quantity-value {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #1a202c;
+  min-width: 20px;
+  text-align: center;
+}
+
+/* Estimation Total Box */
+.point-estimation-group {
+  margin-top: 1rem;
+}
+
+.estimation-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.estimation-text {
+  font-size: 0.8rem;
+  color: #4a5568;
+  max-width: 65%;
+}
+
+.estimation-value {
+  background-color: #e6f4ea;
+  color: #1e6d52;
+  font-weight: 800;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  font-size: 1.1rem;
+}
+
+/* Submit Button */
+.submit-btn {
+  width: 100%;
+  padding: 0.8rem;
+  background-color: #1e6d52;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background-color 0.2s ease;
+}
+
+.submit-btn:hover {
+  background-color: #154d3a;
+}
+
+/* Responsive */
+@media (max-width: 850px) {
+  .pickup-content {
+    grid-template-columns: 1fr;
+  }
+
+  .map-section {
+    height: 320px;
+  }
+}
+
+@media (max-width: 480px) {
+  .pickup-type-options,
+  .date-time-inputs {
+    grid-template-columns: 1fr;
+  }
+}

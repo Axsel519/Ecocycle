@@ -1,0 +1,261 @@
+/* ==========================================
+   Global & Reset Styles
+   ========================================== */
+* {
+  box-sizing: border-box;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+}
+
+.home-page-wrapper {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+/* ==========================================
+   Home Container (Header & Hero Background)
+   ========================================== */
+.home-container {
+  width: 100%;
+  min-height: auto;
+  background-image: url("/images/bghome.png");
+  background-size: cover;
+  background-position: top center;
+  background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+}
+
+/* ==========================================
+   Hero Section
+   ========================================== */
+.hero-section {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px 40px 80px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  box-sizing: border-box;
+}
+
+.hero-content {
+  flex: 1;
+  max-width: 580px;
+}
+
+.hero-title {
+  font-size: clamp(2.2rem, 4vw, 3rem);
+  font-weight: 700;
+  color: #0f2d23;
+  line-height: 1.15;
+  margin-bottom: 20px;
+  letter-spacing: -1px;
+}
+
+.highlight-text {
+  color: #0d5c46d4;
+}
+
+.hero-description {
+  font-size: clamp(0.95rem, 1.5vw, 1rem);
+  color: #333;
+  line-height: 1.6;
+  margin-bottom: 32px;
+  font-weight: 500;
+}
+
+/* Hero Buttons */
+.hero-buttons {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.hero-buttons .btn {
+  padding: 14px 28px;
+  border-radius: 100vw;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  transition: all 0.2s ease-in-out;
+}
+
+.hero-buttons .btn:hover {
+  transform: translateY(-2px);
+}
+
+/* ==========================================
+   Steps Info Section
+   ========================================== */
+.info-section {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 60px 20px 80px 20px;
+  box-sizing: border-box;
+}
+
+.info-header {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 50px auto;
+}
+
+.info-title {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 800;
+  color: #11281f;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
+.info-subtitle {
+  font-size: clamp(0.9rem, 1.5vw, 1rem);
+  color: #3b5449;
+  line-height: 1.6;
+  font-weight: 500;
+  margin: 0;
+}
+
+/* Steps Grid */
+.steps-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.step-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 24px 16px;
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 16px;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.step-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+}
+
+.step-icon {
+  width: 110px;
+  height: 110px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  padding: 12px;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.step-icon img {
+  width: 100vw;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* أيقونة Bootstrap */
+.step-icon i {
+  font-size: 50px;
+  color: #11281f;
+}
+
+.step-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: #11281f;
+  margin-bottom: 10px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.step-desc {
+  font-size: 14px;
+  color: #4a6358;
+  line-height: 1.5;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* ==========================================
+   Responsive Media Queries
+   ========================================== */
+
+@media (max-width: 992px) {
+  .hero-section {
+    padding: 20px 24px 60px 24px;
+  }
+
+  .steps-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-section {
+    flex-direction: column;
+    text-align: center;
+    padding: 20px 20px 50px 20px;
+  }
+
+  .hero-content {
+    max-width: 100%;
+  }
+
+  .hero-buttons {
+    justify-content: center;
+  }
+
+  .info-section {
+    padding: 40px 16px 60px 16px;
+  }
+}
+
+@media (max-width: 576px) {
+  .steps-container {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .hero-buttons .btn {
+    width: 100%;
+  }
+
+  .step-icon {
+    width: 95px;
+    height: 95px;
+  }
+
+  .step-icon i {
+    font-size: 40px;
+  }
+}
