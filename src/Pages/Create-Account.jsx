@@ -17,7 +17,7 @@ function CreateAccount() {
     confirmPassword: "",
   });
 
-  const [profileImageFile, setProfileImageFile] = useState(null);
+  const [profileImageBase64, setProfileImageBase64] = useState("");
   const [profileImagePreview, setProfileImagePreview] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -35,11 +35,14 @@ function CreateAccount() {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setProfileImageFile(file);
-      if (profileImagePreview) {
-        URL.revokeObjectURL(profileImagePreview);
-      }
       setProfileImagePreview(URL.createObjectURL(file));
+
+      // تحويل الصورة إلى Base64 لإرسالها وتخزينها كـ avatarUrl
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfileImageBase64(reader.result);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -60,7 +63,7 @@ function CreateAccount() {
       return;
     }
 
-    if (formData.nationalId.length !== 14) {
+    if (formData.nationalId.trim().length !== 14) {
       setErrorMessage("National ID number must be exactly 14 digits.");
       return;
     }
@@ -68,39 +71,54 @@ function CreateAccount() {
     setIsLoading(true);
 
     try {
-      const dataToSend = new FormData();
-      dataToSend.append("firstName", formData.firstName);
-      dataToSend.append("lastName", formData.lastName);
-      dataToSend.append("nationalId", formData.nationalId);
-      dataToSend.append("address", formData.address);
-      dataToSend.append("phone", formData.phone);
-      dataToSend.append("email", formData.email);
-      dataToSend.append("password", formData.password);
+      const payload = {
+        firstName: formData.firstName.trim(),
+        lastName: formData.lastName.trim(),
+        nationalId: formData.nationalId.trim(),
+        address: formData.address.trim(),
+        phone: formData.phone.trim(),
+        email: formData.email.trim(),
+        password: formData.password,
+        avatarUrl: profileImageBase64 || "",
+      };
 
-      if (profileImageFile) {
-        dataToSend.append("profileImage", profileImageFile);
-      }
-
-      const response = await fetch(
-        "https://your-api-endpoint.com/api/register",
-        {
-          method: "POST",
-          body: dataToSend,
+      const response = await fetch("http://localhost:5000/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify(payload),
+      });
+
+      const result = await response.json();
 
       if (response.ok) {
-        const result = await response.json();
+        // حفظ بيانات المستخدم للدخول مباشرة
+        if (result.token) {
+          localStorage.setItem("authToken", result.token);
+        }
+        if (result.user) {
+          const userWithAvatar = {
+            ...result.user,
+            avatarUrl: profileImageBase64 || result.user.avatarUrl || "",
+          };
+          localStorage.setItem("user", JSON.stringify(userWithAvatar));
+        }
+
         alert("Account created successfully!");
-        navigate("/login");
+        navigate("/");
       } else {
-        const errorData = await response.json();
-        setErrorMessage(errorData.message || "Failed to create account.");
+        setErrorMessage(
+          Array.isArray(result.message)
+            ? result.message.join(", ")
+            : result.message || "Failed to create account.",
+        );
       }
     } catch (error) {
       console.error("Registration error:", error);
-      alert("Simulated: Account created successfully!");
-      navigate("/dashboard");
+      setErrorMessage(
+        "تعذر الاتصال بالسيرفر، تأكد من تشغيل السيرفر على البورت 5000.",
+      );
     } finally {
       setIsLoading(false);
     }
@@ -122,6 +140,7 @@ function CreateAccount() {
                 fontSize: "13px",
                 textAlign: "center",
                 fontWeight: "bold",
+                marginBottom: "15px",
               }}
             >
               {errorMessage}

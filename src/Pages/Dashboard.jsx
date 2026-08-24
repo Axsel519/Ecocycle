@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import Header from "../Components/Header";
 import "../Styles/Dashboard.css";
@@ -36,14 +36,53 @@ const recentActivities = [
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const [userName] = useState("Alex");
-  const [userPoints] = useState(2450);
+  const [adminUser, setAdminUser] = useState(null);
+  const [userPoints, setUserPoints] = useState(2450);
   const [recycledCount] = useState(38);
   const [pendingPickups] = useState(1);
+
+  useEffect(() => {
+    const storedUserStr = localStorage.getItem("user");
+    if (!storedUserStr) {
+      navigate("/login");
+      return;
+    }
+
+    try {
+      const user = JSON.parse(storedUserStr);
+
+      // حماية الصفحة: إذا لم يكن أدمن، يتم توجيهه للهوم فوراً
+      if (user.role !== "admin") {
+        navigate("/");
+        return;
+      }
+
+      setAdminUser(user);
+      if (user.points !== undefined) {
+        setUserPoints(user.points);
+      }
+    } catch (error) {
+      console.error("Error reading user data", error);
+      navigate("/login");
+    }
+  }, [navigate]);
 
   const handleScanClick = () => {
     navigate("/scan");
   };
+
+  // استخراج الاسم الكامل مع المسافة الفاصلة
+  const getAdminFullName = () => {
+    if (!adminUser) return "Admin";
+    if (adminUser.firstName && adminUser.lastName) {
+      return `${adminUser.firstName.trim()} ${adminUser.lastName.trim()}`;
+    }
+    return adminUser.name || "Admin";
+  };
+
+  if (!adminUser) {
+    return null; // منع وميض الشاشة قبل التحقق من الصلاحيات
+  }
 
   return (
     <div className="dashboard-page-container">
@@ -56,7 +95,8 @@ const Dashboard = () => {
         <div className="welcome-banner">
           <div className="welcome-text">
             <h1>
-              Welcome back, <span className="green-text">{userName}</span>! 👋
+              Welcome back,{" "}
+              <span className="green-text">{getAdminFullName()}</span>! 👋
             </h1>
             <p>
               Track your recycling impact, manage pickups, and check your earned
@@ -159,7 +199,9 @@ const Dashboard = () => {
               <div className="progress-bar-container">
                 <div
                   className="progress-bar-fill"
-                  style={{ width: `${(userPoints / 3000) * 100}%` }}
+                  style={{
+                    width: `${Math.min((userPoints / 3000) * 100, 100)}%`,
+                  }}
                 ></div>
               </div>
               <div className="progress-labels">

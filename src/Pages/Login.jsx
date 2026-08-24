@@ -33,7 +33,8 @@ function Login() {
     setIsLoading(true);
 
     try {
-      const response = await fetch("https://your-api-endpoint.com/api/login", {
+      // تصحيح الرابط الكامل لسيرفر NestJS
+      const response = await fetch("http://localhost:5000/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -41,22 +42,30 @@ function Login() {
         body: JSON.stringify(formData),
       });
 
-      if (response.ok) {
-        const data = await response.json();
+      const data = await response.json();
 
+      if (response.ok) {
+        // حفظ التوكن وبيانات المستخدم في التخزين المحلي
         if (data.token) {
           localStorage.setItem("authToken", data.token);
         }
+        if (data.user) {
+          localStorage.setItem("user", JSON.stringify(data.user));
+        }
 
-        navigate("/dashboard");
+        navigate("/");
       } else {
-        const errorData = await response.json();
-        setErrorMessage(errorData.message || "Invalid email or password.");
+        setErrorMessage(
+          Array.isArray(data.message)
+            ? data.message.join(", ")
+            : data.message || "Invalid email or password.",
+        );
       }
     } catch (error) {
       console.error("Login error:", error);
-      alert("Simulated: Logged in successfully!");
-      navigate("/dashboard");
+      setErrorMessage(
+        "تعذر الاتصال بالسيرفر، تأكد من تشغيل السيرفر على البورت 5000.",
+      );
     } finally {
       setIsLoading(false);
     }
@@ -91,6 +100,7 @@ function Login() {
                     fontSize: "13px",
                     textAlign: "center",
                     fontWeight: "bold",
+                    marginBottom: "15px",
                   }}
                 >
                   {errorMessage}
