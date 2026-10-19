@@ -40,8 +40,8 @@ function Home() {
     navigate("/scan");
   };
 
-  const handlePickupRequest = () => {
-    navigate("/pickup");
+  const handleLogIn = () => {
+    navigate("/login");
   };
 
   return (
@@ -75,9 +75,9 @@ function Home() {
               <button
                 type="button"
                 className="btn btn-outline-success"
-                onClick={handlePickupRequest}
+                onClick={handleLogIn}
               >
-                REQUEST AT-HOME PICKUP
+                JOIN OUR WORLD
               </button>
             </div>
           </div>

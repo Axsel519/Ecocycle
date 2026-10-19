@@ -13,6 +13,8 @@ import Dashboard from "./Pages/Dashboard";
 import Login from "./Pages/Login";
 import CreateAccount from "./Pages/Create-Account";
 import Scan from "./Pages/Scan";
+import CorporateDashboard from "./Pages/CorporateDashboard";
+import DeliveryDashboard from "./Pages/DeliveryDashboard";
 
 // مكون التمرير لأعلى عند تغيير الصفحة
 function ScrollToTop() {
@@ -37,6 +39,8 @@ function App() {
           <Route path="login" element={<Login />} />
           <Route path="register" element={<CreateAccount />} />
           <Route path="scan" element={<Scan />} />
+          <Route path="/corporate" element={<CorporateDashboard />} />
+          <Route path="/delivery" element={<DeliveryDashboard />} />
         </Route>
       </Routes>
     </BrowserRouter>

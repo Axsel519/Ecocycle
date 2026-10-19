@@ -5,6 +5,7 @@ import {
   Marker,
   Popup,
   useMapEvents,
+  useMap,
 } from "react-leaflet";
 import L from "leaflet";
 import Header from "../Components/Header";
@@ -27,41 +28,30 @@ const wasteCategories = [
   {
     id: "paper",
     label: "Paper",
-    unitPrice: 10,
+    unitPrice: 0.04,
     icon: <i className="bi bi-file-earmark-text"></i>,
   },
   {
     id: "cans",
     label: "Cans",
-    unitPrice: 25,
+    unitPrice: 0.45,
     icon: <i className="bi bi-cup-straw"></i>,
   },
   {
     id: "glass",
     label: "Glass",
-    unitPrice: 20,
+    unitPrice: 1,
     icon: <i className="bi bi-cup-hot"></i>,
   },
   {
     id: "plastic",
     label: "Plastic",
-    unitPrice: 15,
+    unitPrice: 0.15,
     icon: <i className="bi bi-droplet"></i>,
-  },
-  {
-    id: "jugs",
-    label: "Jugs",
-    unitPrice: 30,
-    icon: <i className="bi bi-bucket"></i>,
-  },
-  {
-    id: "electronics",
-    label: "Electronics",
-    unitPrice: 50,
-    icon: <i className="bi bi-laptop"></i>,
   },
 ];
 
+// مكون اختيار الموقع عند النقر على الخريطة
 const LocationPicker = ({ position, setPosition, setAddress }) => {
   useMapEvents({
     async click(e) {
@@ -90,9 +80,71 @@ const LocationPicker = ({ position, setPosition, setAddress }) => {
   ) : null;
 };
 
+// مكون زر الـ GPS لتحديد الموقع الحالي وتدوين العنوان مباشرة
+const GPSButton = ({ setPosition, setAddress }) => {
+  const map = useMap();
+  const [isLocating, setIsLocating] = useState(false);
+
+  const handleGetLocation = () => {
+    if (!navigator.geolocation) {
+      alert("Geolocation is not supported by your browser");
+      return;
+    }
+
+    setIsLocating(true);
+
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+        const newPos = [lat, lng];
+
+        setPosition(newPos);
+        map.flyTo(newPos, 16);
+
+        try {
+          const response = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`,
+          );
+          const data = await response.json();
+          if (data && data.display_name) {
+            setAddress(data.display_name);
+          }
+        } catch (error) {
+          console.error("Failed to fetch address:", error);
+        } finally {
+          setIsLocating(false);
+        }
+      },
+      (error) => {
+        console.error("GPS Error:", error);
+        alert(
+          "Unable to retrieve your location. Please enable location permissions.",
+        );
+        setIsLocating(false);
+      },
+      { enableHighAccuracy: true },
+    );
+  };
+
+  return (
+    <button
+      type="button"
+      className="gps-location-btn"
+      onClick={handleGetLocation}
+      disabled={isLocating}
+    >
+      <i
+        className={`bi ${isLocating ? "bi-hourglass-split" : "bi-geo-alt-fill"}`}
+      ></i>
+      <span>{isLocating ? "Locating..." : "Use Current Location"}</span>
+    </button>
+  );
+};
+
 const PickupRequest = () => {
   const [address, setAddress] = useState("");
-  const [pickupType, setPickupType] = useState("home"); // 'home' or 'dropoff'
+  const [pickupType, setPickupType] = useState("home");
 
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
@@ -106,7 +158,7 @@ const PickupRequest = () => {
     electronics: 0,
   });
 
-  const [position, setPosition] = useState([30.0444, 31.2357]); // القاهرة افتراضياً
+  const [position, setPosition] = useState([30.0444, 31.2357]);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -118,13 +170,11 @@ const PickupRequest = () => {
     });
   };
 
-  // حساب الإجمالي الحقيقي
   const totalEstimation = wasteCategories.reduce((sum, item) => {
     const qty = quantities[item.id] || 0;
     return sum + qty * item.unitPrice;
   }, 0);
 
-  // إرسال الطلب للباك إند
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage("");
@@ -143,12 +193,11 @@ const PickupRequest = () => {
 
     setIsLoading(true);
 
-    // تجهيز كائن البيانات المرسلة للباك إند
     const pickupData = {
       address,
       latitude: position[0],
       longitude: position[1],
-      pickupType, // "home" or "dropoff"
+      pickupType,
       schedule:
         pickupType === "home"
           ? { date: selectedDate, time: selectedTime }
@@ -158,22 +207,18 @@ const PickupRequest = () => {
     };
 
     try {
-      const token = localStorage.getItem("authToken"); // التوكن إذا كان المستخدم مسجلاً
-      const response = await fetch(
-        "https://your-api-endpoint.com/api/pickups",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: token ? `Bearer ${token}` : "",
-          },
-          body: JSON.stringify(pickupData),
+      const token = localStorage.getItem("authToken");
+      const response = await fetch("http://localhost:5000/api/pickups", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token ? `Bearer ${token}` : "",
         },
-      );
+        body: JSON.stringify(pickupData),
+      });
 
       if (response.ok) {
         alert("Pickup Request Submitted Successfully!");
-        // إعادة تعيين الحقول بعد النجاح
         setQuantities({
           paper: 0,
           cans: 0,
@@ -191,7 +236,6 @@ const PickupRequest = () => {
       }
     } catch (error) {
       console.error("Submission error:", error);
-      // تجربة محاكاة النجاح في البيئة المحلية
       alert(
         `Simulated: Request Submitted Successfully! Total: $${totalEstimation}`,
       );
@@ -227,6 +271,7 @@ const PickupRequest = () => {
                 setPosition={setPosition}
                 setAddress={setAddress}
               />
+              <GPSButton setPosition={setPosition} setAddress={setAddress} />
             </MapContainer>
           </div>
 
@@ -234,23 +279,13 @@ const PickupRequest = () => {
           <div className="form-section">
             <form onSubmit={handleSubmit}>
               {errorMessage && (
-                <div
-                  className="error-alert"
-                  style={{
-                    color: "#e11d48",
-                    fontSize: "13px",
-                    fontWeight: "bold",
-                    marginBottom: "12px",
-                  }}
-                >
-                  {errorMessage}
-                </div>
+                <div className="error-alert">{errorMessage}</div>
               )}
 
               {/* Pickup Address */}
               <div className="form-group">
                 <label className="form-label">
-                  Pickup Address (Click on map to pick location)
+                  Pickup Address (Click map or use GPS)
                 </label>
                 <input
                   type="text"
@@ -321,7 +356,7 @@ const PickupRequest = () => {
                 </div>
               )}
 
-              {/* Waste Types with Counter & Unit Price */}
+              {/* Waste Types */}
               <div className="form-group">
                 <label className="form-label">Waste Types & Quantities</label>
                 <div className="waste-list-container">
@@ -331,7 +366,7 @@ const PickupRequest = () => {
                         <span className="waste-icon">{item.icon}</span>
                         <span className="waste-label">{item.label}</span>
                         <span className="unit-price">
-                          (${item.unitPrice}/unit)
+                          ({item.unitPrice}ُ EGP/unit)
                         </span>
                       </div>
 
@@ -359,14 +394,16 @@ const PickupRequest = () => {
                 </div>
               </div>
 
-              {/* Point/Price Estimation */}
+              {/* Point Estimation */}
               <div className="form-group point-estimation-group">
                 <label className="form-label">Point Estimation</label>
                 <div className="estimation-row">
                   <span className="estimation-text">
                     Estimated total value based on your selection
                   </span>
-                  <span className="estimation-value">~${totalEstimation}</span>
+                  <span className="estimation-value">
+                    ~{totalEstimation} EGP
+                  </span>
                 </div>
               </div>
 

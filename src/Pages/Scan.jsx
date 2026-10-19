@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom"; // 1. إضافة استيراد useNavigate
 import Header from "../Components/Header";
 import "../Styles/Scan.css";
 
@@ -19,6 +20,7 @@ const Scan = () => {
   const [isScanning, setIsScanning] = useState(false);
   const [scanResult, setScanResult] = useState(null);
   const fileInputRef = useRef(null);
+  const navigate = useNavigate(); // 2. تعيين دالة التنقل
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -50,6 +52,11 @@ const Scan = () => {
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
+  };
+
+  // 3. نقل الدالة هنا في النطاق الرئيسي للمكون لتصبح شغال بشكل صحيح
+  const handlePickupRequest = () => {
+    navigate("/pickup");
   };
 
   return (
@@ -181,9 +188,7 @@ const Scan = () => {
 
                 <button
                   className="btn btn-success claim-btn"
-                  onClick={() =>
-                    alert("Points claimed and added to your wallet!")
-                  }
+                  onClick={handlePickupRequest}
                 >
                   CLAIM REWARD & SAVE
                 </button>

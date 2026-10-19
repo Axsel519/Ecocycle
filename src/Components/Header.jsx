@@ -27,7 +27,7 @@ function Header() {
     }
   }, [location]);
 
-  // إغلاق القائمة عند النقر في أي مكان خارجها
+  // إغلاق القائمة عند النقر خارجها
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -139,8 +139,15 @@ function Header() {
             <NavLink to="/rewards" onClick={closeMenu}>
               Rewards
             </NavLink>
-            <NavLink to="/pickup" onClick={closeMenu}>
-              Pickup
+
+            {/* رابط صفحة الشركات */}
+            <NavLink to="/corporate" onClick={closeMenu}>
+              Corporate
+            </NavLink>
+
+            {/* رابط صفحة التوصيل والمندوب */}
+            <NavLink to="/delivery" onClick={closeMenu}>
+              Delivery
             </NavLink>
 
             {/* Dashboard يظهر فقط إذا كان المستخدم Admin */}

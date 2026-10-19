@@ -347,3 +347,151 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Navigation Tabs for Admin Control */
+.admin-nav-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.admin-tab-btn {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 13.5px;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.admin-tab-btn:hover {
+  border-color: #006847;
+  color: #006847;
+}
+
+.admin-tab-btn.active {
+  background: #006847;
+  color: #ffffff;
+  border-color: #006847;
+  box-shadow: 0 4px 12px rgba(0, 104, 71, 0.2);
+}
+
+/* Status Badges */
+.status-badge.in-progress {
+  background-color: #e0f2fe;
+  color: #0284c7;
+}
+
+.status-badge.pending {
+  background-color: #fef3c7;
+  color: #d97706;
+}
+
+.status-badge.cancelled {
+  background-color: #ffe4e6;
+  color: #e11d48;
+}
+
+/* User Roles */
+.role-badge {
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 10.5px;
+  font-weight: 800;
+}
+
+.role-badge.admin {
+  background: #f3e8ff;
+  color: #7e22ce;
+}
+
+.role-badge.user {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.role-badge.courier {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+/* Interactive Actions */
+.table-action-select {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  font-size: 12px;
+  font-weight: 700;
+  outline: none;
+  cursor: pointer;
+}
+
+.points-action-group {
+  display: flex;
+  gap: 6px;
+}
+
+.small-btn {
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.small-btn:hover {
+  opacity: 0.85;
+}
+
+.add-pts {
+  background: #e6f4ea;
+  color: #006847;
+}
+
+.disable-btn {
+  background: #ffe4e6;
+  color: #e11d48;
+}
+
+.enable-btn {
+  background: #e0f2fe;
+  color: #0284c7;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.quick-link-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  color: #0f172a;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-bottom: 8px;
+  transition: all 0.2s ease;
+}
+
+.quick-link-btn:hover {
+  border-color: #006847;
+  color: #006847;
+  background-color: #ffffff;
+}

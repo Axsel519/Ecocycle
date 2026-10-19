@@ -10,6 +10,7 @@ function CreateAccount() {
     firstName: "",
     lastName: "",
     nationalId: "",
+    registrationType: "",
     address: "",
     phone: "",
     email: "",
@@ -68,6 +69,11 @@ function CreateAccount() {
       return;
     }
 
+    if (!formData.registrationType) {
+      setErrorMessage("Please select a registration type.");
+      return;
+    }
+
     setIsLoading(true);
 
     try {
@@ -75,6 +81,7 @@ function CreateAccount() {
         firstName: formData.firstName.trim(),
         lastName: formData.lastName.trim(),
         nationalId: formData.nationalId.trim(),
+        registrationType: formData.registrationType,
         address: formData.address.trim(),
         phone: formData.phone.trim(),
         email: formData.email.trim(),
@@ -225,6 +232,23 @@ function CreateAccount() {
             </div>
           </div>
 
+          {/* Registration type */}
+          <div className="input-group">
+            <label htmlFor="registrationType">REGISTRATION TYPE</label>
+            <div className="input-wrapper">
+              <select
+                id="registrationType"
+                value={formData.registrationType}
+                onChange={handleInputChange}
+                required
+              >
+                <option value="personal">Personal account</option>
+                <option value="individual">Delivery account</option>
+                <option value="business">Business account</option>
+              </select>
+            </div>
+          </div>
+
           {/* Address */}
           <div className="input-group">
             <label htmlFor="address">ADDRESS</label>
@@ -317,7 +341,9 @@ function CreateAccount() {
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
               >
                 <i
-                  className={`bi ${showConfirmPassword ? "bi-eye-slash" : "bi-eye"}`}
+                  className={`bi ${
+                    showConfirmPassword ? "bi-eye-slash" : "bi-eye"
+                  }`}
                 ></i>
               </button>
             </div>

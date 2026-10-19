@@ -69,7 +69,7 @@
 }
 
 .hero-description {
-  font-size: clamp(0.95rem, 1.5vw, 1rem);
+  font-size: clamp(1.2rem, 1.5vw, 1rem);
   color: #333;
   line-height: 1.6;
   margin-bottom: 32px;
